@@ -1,0 +1,73 @@
+@import "tailwindcss";
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+/* MOBILE = completely hidden */
+
+.scrollbar-premium {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-premium::-webkit-scrollbar {
+  display: none;
+}
+
+/* DESKTOP = thin orange scrollbar */
+
+@media (min-width: 1024px) {
+  .scrollbar-premium {
+    scrollbar-width: thin;
+    scrollbar-color: #FF7A1A transparent;
+  }
+
+  .scrollbar-premium::-webkit-scrollbar {
+    display: block;
+    width: 4px;
+    margin-top: 40px;
+    margin-bottom: 0px;  }
+
+  .scrollbar-premium::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-premium::-webkit-scrollbar-thumb {
+    background: #FF7A1A;
+    border-radius: 999px;
+  }
+
+  .scrollbar-premium::-webkit-scrollbar-thumb:hover {
+    background: #ff8f3f;
+  }
+}
