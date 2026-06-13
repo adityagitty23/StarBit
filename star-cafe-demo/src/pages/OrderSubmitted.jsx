@@ -3,6 +3,16 @@ import { useNavigate } from "react-router-dom";
 export default function OrderSubmitted() {
   const navigate = useNavigate();
 
+  const orderId =
+  localStorage.getItem(
+    "currentOrderId"
+  );
+  
+  const orderType =
+  localStorage.getItem(
+    "currentOrderType"
+  ) || "pickup";
+
   return (
     <div className="min-h-screen bg-[#FFF7F0] flex items-center justify-center px-4">
       <div
@@ -49,8 +59,8 @@ export default function OrderSubmitted() {
           </p>
 
           <p className="font-bold text-xl text-[#FF7A1A]">
-            SB12345
-          </p>
+          {orderId}
+        </p>
         </div>
 
         {/* Status */}
@@ -91,9 +101,9 @@ export default function OrderSubmitted() {
               Order Type
             </span>
 
-            <span className="font-medium">
-              Pickup
-            </span>
+          <span className="font-medium capitalize">
+            {orderType}
+          </span>
           </div>
         </div>
 

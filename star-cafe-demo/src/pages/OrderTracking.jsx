@@ -1,39 +1,236 @@
-import { useState } from "react";
+import {
+  useState,
+  useEffect,
+} from "react";
 
+import api from "../services/api";
+import restaurantConfig
+from "../config/restaurantConfig";
+
+  
 export default function OrderTracking() {
-  // Temporary Demo Status
-  const [status] = useState("accepted");
 
-  const statuses = [
-    {
-      key: "accepted",
-      title: "Order Accepted",
-      icon: "✅",
-    },
+  const [order, setOrder] =
+  useState(null);
 
-    {
-      key: "preparing",
-      title: "Preparing",
-      icon: "👨‍🍳",
-    },
+const [loading, setLoading] =
+  useState(true);
 
-    {
-      key: "ready_for_pickup",
-      title: "Ready For Pickup",
-      icon: "📦",
-    },
+ const statuses = [
+  {
+    key: "pending",
+    title: "Order Received",
+    icon: "⏳",
+  },
 
-    {
-      key: "collected",
-      title: "Collected",
-      icon: "🎉",
-    },
-  ];
+  {
+    key: "accepted",
+    title: "Order Accepted",
+    icon: "✅",
+  },
 
-  const currentIndex =
-    statuses.findIndex(
-      (item) => item.key === status
+  {
+    key: "preparing",
+    title: "Preparing",
+    icon: "👨‍🍳",
+  },
+
+  {
+    key: "ready_for_pickup",
+    title: "Ready For Pickup",
+    icon: "📦",
+  },
+
+  {
+  key: "completed",
+  title: "Completed",
+  icon: "🎉",
+},
+{
+  key: "cancelled",
+  title: "Cancelled",
+  icon: "🚫",
+},
+{
+  key: "rejected",
+  title: "Order Rejected",
+  icon: "❌",
+},
+
+];
+
+const currentStatus =
+  order?.status || "pending";
+
+const currentIndex =
+  statuses.findIndex(
+    (item) =>
+      item.key === currentStatus
+  );
+
+const handleCancelOrder =
+  async () => {
+
+    const confirmCancel =
+      window.confirm(
+        "Are you sure you want to cancel this order?"
+      );
+
+    if (!confirmCancel) {
+      return;
+    }
+
+    try {
+
+      await api.put(
+        `/orders/${order.orderId}`,
+        {
+          status: "cancelled",
+        }
+      );
+
+      window.location.href =
+        "/order-cancelled";
+
+    } catch (error) {
+
+      console.error(error);
+
+    }
+  };
+
+    useEffect(() => {
+
+  const fetchOrder =
+    async () => {
+
+      try {
+
+        const orderId =
+          localStorage.getItem(
+            "currentOrderId"
+          );
+
+        if (!orderId) {
+          setLoading(false);
+          return;
+        }
+
+const res =
+  await api.get(
+    `/order/${orderId}`
+  );
+
+if (
+  res.data.status ===
+  "rejected"
+) {
+
+  window.location.href =
+    "/order-rejected";
+
+  return;
+
+}
+
+if (
+  res.data.status ===
+  "cancelled"
+) {
+
+  window.location.href =
+    "/order-cancelled";
+
+  return;
+
+}
+
+if (
+  res.data.status ===
+  "payment_required"
+) {
+
+  window.location.href =
+    "/payment";
+
+  return;
+
+}
+
+if (
+  res.data.status ===
+  "review_required"
+) {
+
+  localStorage.setItem(
+    "reviewMessage",
+    res.data.reviewMessage || ""
+  );
+
+  window.location.href =
+    "/review-required";
+
+  return;
+
+}
+
+if (
+  res.data.status === "completed" ||
+  res.data.status === "cancelled" ||
+  res.data.status === "rejected"
+) {
+
+  localStorage.removeItem(
+    "activeOrder"
+  );
+
+  localStorage.removeItem(
+    "currentOrderId"
+  );
+
+  localStorage.removeItem(
+    "currentOrderType"
+  );
+
+}
+
+setOrder(
+  res.data
+);
+
+      } catch (error) {
+
+        console.error(error);
+
+      } finally {
+
+        setLoading(false);
+
+      }
+    };
+
+  fetchOrder();
+
+  const interval =
+    setInterval(
+      fetchOrder,
+      5000
     );
+
+  return () =>
+    clearInterval(interval);
+
+}, []);
+
+if (loading) {
+
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      Loading Order...
+    </div>
+  );
+}
+
 
   return (
     <div className="min-h-screen bg-[#FFF7F0] flex justify-center">
@@ -79,7 +276,7 @@ export default function OrderTracking() {
               </p>
 
               <h2 className="font-bold text-xl">
-                SB12345
+                {order?.orderId}
               </h2>
             </div>
 
@@ -95,7 +292,9 @@ export default function OrderTracking() {
                 h-fit
               "
             >
-              Accepted
+              {currentStatus
+  .replaceAll("_", " ")
+  .toUpperCase()}
             </div>
           </div>
         </div>
@@ -198,6 +397,28 @@ export default function OrderTracking() {
           )}
         </div>
 
+        <div
+  className="
+    mt-6
+
+    bg-white/70
+    backdrop-blur-xl
+
+    border
+    border-white/50
+
+    rounded-[28px]
+
+    p-5
+
+    shadow-sm
+  "
+>
+
+
+
+</div>
+
         {/* Help Card */}
 
         <div
@@ -219,19 +440,89 @@ export default function OrderTracking() {
             about your order.
           </p>
 
-          <button
-            className="
-              mt-4
-              w-full
-              bg-[#FF7A1A]
-              text-white
-              py-3
-              rounded-2xl
-              font-semibold
-            "
-          >
-            Call Restaurant
-          </button>
+          {(
+  order?.status === "pending" ||
+  order?.status === "accepted"
+) && (
+
+  <button
+    onClick={
+      handleCancelOrder
+    }
+    className="
+      w-full
+
+      mb-4
+
+      bg-red-500/90
+      backdrop-blur-xl
+
+      text-white
+
+      py-3
+
+      rounded-2xl
+
+      font-semibold
+
+      shadow-lg
+
+      hover:bg-red-600
+
+      transition-all
+    "
+  >
+    Cancel Order
+  </button>
+
+)}
+
+            <a
+              href={`tel:${restaurantConfig.mobile}`}
+              className="
+                block
+                mt-4
+                w-full
+                bg-[#FF7A1A]
+                text-white
+                py-3
+                rounded-2xl
+                font-semibold
+                text-center
+              "
+            >
+              Call Restaurant
+            </a>
+
+            <button
+  onClick={() =>
+    window.open(
+      `/invoice/${order.orderId}`,
+      "_blank"
+    )
+  }
+  className="
+    w-full
+
+    mt-3
+
+    bg-white/70
+    backdrop-blur-xl
+
+    border
+    border-[#FF7A1A]
+
+    text-[#FF7A1A]
+
+    py-3
+
+    rounded-2xl
+
+    font-semibold
+  "
+>
+  Download Invoice
+</button>
         </div>
       </div>
     </div>

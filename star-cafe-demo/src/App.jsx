@@ -9,6 +9,12 @@ import OrderTracking from "./pages/OrderTracking";
 import ReviewRequired from "./pages/ReviewRequired";
 import Payment from "./pages/Payment";
 import OrderCompleted from "./pages/OrderCompleted";
+import OrderRejected
+from "./pages/OrderRejected";
+import OrderCancelled
+from "./pages/OrderCancelled";
+import UpiPayment from "./pages/UpiPayment";
+import Invoice from "./pages/Invoice";
 
 function App() {
   return (
@@ -41,6 +47,22 @@ function App() {
 <Route
   path="/order-completed"
   element={<OrderCompleted />}
+/>
+<Route
+  path="/order-cancelled"
+  element={<OrderCancelled />}
+/>
+<Route
+  path="/order-rejected"
+  element={<OrderRejected />}
+/>
+<Route
+  path="/upi-payment"
+  element={<UpiPayment />}
+/>
+<Route
+  path="/invoice/:orderId"
+  element={<Invoice />}
 />
       </Routes>
     </BrowserRouter>

@@ -1,5 +1,7 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import api from "../services/api";
+
 
 export default function Payment() {
   const navigate = useNavigate();
@@ -7,11 +9,134 @@ export default function Payment() {
   const [paymentMethod, setPaymentMethod] =
     useState("cash");
 
-  const totalAmount = 299;
+  const [order, setOrder] =
+  useState(null);
 
-  const handleContinue = () => {
-    navigate("/order-tracking");
+const [loading, setLoading] =
+  useState(true);
+
+const handleContinue =
+  async () => {
+
+    try {
+
+      if (
+        paymentMethod === "cash"
+      ) {
+
+        await api.put(
+          `/orders/${order.orderId}`,
+          {
+            paymentMethod:
+              "cash",
+
+            paymentStatus:
+              "pending",
+
+            status:
+              "preparing",
+          }
+        );
+
+      }
+
+if (
+  paymentMethod === "upi"
+) {
+
+  navigate(
+    "/upi-payment"
+  );
+
+  return;
+
+} {
+
+        await api.put(
+          `/orders/${order.orderId}`,
+          {
+            paymentMethod:
+              "upi",
+
+            paymentStatus:
+              "paid",
+
+            status:
+              "preparing",
+          }
+        );
+
+      }
+
+      navigate(
+        "/order-tracking"
+      );
+
+    } catch (error) {
+
+      console.error(error);
+
+    }
+
   };
+
+  useEffect(() => {
+
+  const fetchOrder =
+    async () => {
+
+      try {
+
+        const orderId =
+          localStorage.getItem(
+            "currentOrderId"
+          );
+
+        const res =
+          await api.get(
+            `/order/${orderId}`
+          );
+
+        setOrder(
+          res.data
+        );
+
+        if (
+  res.data.status !==
+  "payment_required"
+) {
+
+  navigate(
+    "/order-tracking"
+  );
+
+}
+
+      } catch (error) {
+
+        console.error(error);
+
+      } finally {
+
+        setLoading(false);
+
+      }
+
+    };
+
+  fetchOrder();
+
+}, [navigate]);
+
+if (loading) {
+
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      Loading Payment...
+    </div>
+  );
+
+}
 
   return (
     <div className="min-h-screen bg-[#FFF7F0] flex justify-center">
@@ -48,7 +173,7 @@ export default function Payment() {
             <span>Order ID</span>
 
             <span className="font-semibold">
-              SB12345
+              {order?.orderId}
             </span>
           </div>
 
@@ -62,7 +187,7 @@ export default function Payment() {
                 text-xl
               "
             >
-              ₹{totalAmount}
+              ₹{order?.total}
             </span>
           </div>
         </div>

@@ -1,14 +1,15 @@
 import { Search, Phone } from "lucide-react";
 import logo from "../assets/logo/starbit-logo.png";
-import { restaurant } from "../config/restaurantConfig";
+import restaurantConfig from "../config/restaurantConfig";
 
 export default function Navbar({
   searchTerm,
   setSearchTerm,
 }) {
   const handleCall = () => {
-    window.location.href = `tel:${restaurant.phone}`;
-  };
+window.location.href = `tel:${restaurantConfig.mobile}`;
+
+};
 
   return (
     <header className="sticky top-4 z-30 mb-6">

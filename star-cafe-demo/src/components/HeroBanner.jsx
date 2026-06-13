@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { restaurant } from "../config/restaurantConfig";
+import restaurantConfig from "../config/restaurantConfig";
 import heroSlides from "../data/heroSlides";
 
 export default function HeroBanner({
@@ -184,7 +184,7 @@ rounded-[32px]
       text-xs
     "
   >
-    ⭐ {restaurant.rating}
+    ⭐ {restaurantConfig.rating}
   </div>
 
   {/* Dots */}

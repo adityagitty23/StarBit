@@ -1,12 +1,54 @@
-export const restaurant = {
-  name: "Star Café",
+const restaurantConfig = {
+  // Core
+  id: "STAR5764",
 
-  phone: "+919999999999",
+  restaurantName: "Star Cafe",
 
-  rating: 4.8,
+  ownerName: "Star Cafe Owner",
+
+  // Contact
+  mobile: "9696000088",
+
+  email: "owner@starcafe.com",
+
+  address: "Civil Lines, Prayagraj",
+
+  // Business
+  openingHours:
+    "09:00 AM - 11:00 PM",
+
+  status: "active",
+
+  // Website
+  websiteUrl:
+    "https://star-cafe-demo.vercel.app",
+
+  websiteQr:
+    "/website-qr.png",
+
+  // Payments
+  upiId:
+    "payments@starcafe",
+
+  upiQr:
+    "/upi-qr.png",
+
+  // Branding
+  themeColor:
+    "#FF7A1A",
 
   tagline:
-    "Fresh food, delicious drinks and quick service.",
+    "Fresh Food, Fast Service",
 
-  showStarbitBranding: true,
+  // Optional
+  gstNumber: "",
+
+  instagram: "",
+
+  facebook: "",
+
+  whatsapp:
+    "919696000088",
 };
+
+export default restaurantConfig;

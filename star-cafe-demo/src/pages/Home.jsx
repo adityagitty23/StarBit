@@ -18,6 +18,16 @@ const [selectedCategory, setSelectedCategory] =
 const [searchTerm, setSearchTerm] =
   useState("");
 
+const editingOrder =
+  localStorage.getItem(
+    "editingOrder"
+  );
+
+const reviewMessage =
+  localStorage.getItem(
+    "reviewMessage"
+  );
+
   const categoryRef = useRef(null);
 
 const filteredItems = menuData.filter(
@@ -59,6 +69,41 @@ const filteredItems = menuData.filter(
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
         />
+
+        {editingOrder && (
+
+  <div
+    className="
+      mb-4
+
+      bg-yellow-50/70
+      backdrop-blur-xl
+
+      border
+      border-yellow-200
+
+      rounded-[28px]
+
+      p-5
+    "
+  >
+
+    <h2
+      className="
+        font-bold
+        text-yellow-700
+      "
+    >
+      Restaurant Update
+    </h2>
+
+    <p className="mt-2 text-gray-700">
+      {reviewMessage}
+    </p>
+
+  </div>
+
+)}
 
         {/* Hero Banner */}
         <HeroBanner

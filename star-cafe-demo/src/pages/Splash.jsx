@@ -5,13 +5,33 @@ import logo from "../assets/logo/starbit-logo.png";
 export default function Splash() {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      navigate("/home");
-    }, 1800);
+useEffect(() => {
 
-    return () => clearTimeout(timer);
-  }, [navigate]);
+  const timer = setTimeout(() => {
+
+    const activeOrder =
+      localStorage.getItem(
+        "activeOrder"
+      );
+
+    if (activeOrder) {
+
+      navigate(
+        "/order-tracking"
+      );
+
+    } else {
+
+      navigate("/home");
+
+    }
+
+  }, 1800);
+
+  return () =>
+    clearTimeout(timer);
+
+}, [navigate]);
 
   return (
     <div

@@ -1,36 +1,178 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../services/api";
+import restaurantConfig from "../config/restaurantConfig";
 import { useCart } from "../context/CartContext";
+
 
 export default function Checkout() {
   const navigate = useNavigate();
 
-  const {
-    cartItems,
-    totalPrice,
-  } = useCart();
+const {
+  cartItems,
+  totalPrice,
+  clearCart,
+} = useCart();
 
-  const [formData, setFormData] = useState({
-    name: "",
-    mobile: "",
-    orderType: "pickup",
-    packaging: false,
-    instructions: "",
+    const editingOrder =
+  localStorage.getItem(
+    "editingOrder"
+  );
+
+const savedOrder =
+  localStorage.getItem(
+    "editingOrderData"
+  );
+
+const existingOrder =
+  savedOrder
+    ? JSON.parse(savedOrder)
+    : null;
+
+const [formData, setFormData] =
+  useState({
+    name:
+      existingOrder?.customerName || "",
+
+    mobile:
+      existingOrder?.mobile || "",
+
+    orderType:
+      existingOrder?.orderType ||
+      "pickup",
+
+    packaging:
+      existingOrder?.packaging ||
+      false,
+
+    instructions:
+      existingOrder?.instructions ||
+      "",
   });
 
-  const handleSubmit = () => {
-    if (!formData.name.trim()) {
-      alert("Please enter your name");
-      return;
-    }
+const handleSubmit = async () => {
+  if (!formData.name.trim()) {
+    alert("Please enter your name");
+    return;
+  }
 
-    if (!formData.mobile.trim()) {
-      alert("Please enter mobile number");
-      return;
-    }
+  if (!formData.mobile.trim()) {
+    alert("Please enter mobile number");
+    return;
+  }
 
-    navigate("/order-submitted");
-  };
+  try {
+
+
+      const orderData = {
+        orderId: `SB${Date.now()}`,
+
+        restaurantId:
+  restaurantConfig.id,
+
+        customerName: formData.name,
+
+        mobile: formData.mobile,
+
+        items: cartItems,
+
+        total: totalPrice,
+
+        orderType: formData.orderType,
+
+        packaging: formData.packaging,
+
+        instructions: formData.instructions,
+
+        status: "pending",
+
+        createdAt: new Date().toISOString(),
+      };
+
+        if (editingOrder) {
+
+  await api.put(
+    `/orders/${editingOrder}`,
+    {
+      items: cartItems,
+      total: totalPrice,
+
+      status: "pending",
+
+      reviewMessage: "",
+
+      orderType:
+        formData.orderType,
+
+      packaging:
+        formData.packaging,
+
+      instructions:
+        formData.instructions,
+    }
+  );
+
+  localStorage.removeItem(
+    "editingOrder"
+  );
+
+  localStorage.removeItem(
+    "reviewMessage"
+  );
+
+  localStorage.removeItem(
+  "editingOrderData"
+);
+
+} else {
+
+  await api.post(
+    "/orders",
+    orderData
+  );
+
+}
+
+        localStorage.setItem(
+  "currentOrderId",
+  editingOrder
+    ? editingOrder
+    : orderData.orderId
+);
+
+localStorage.setItem(
+  "activeOrder",
+  JSON.stringify({
+    orderId:
+      editingOrder
+        ? editingOrder
+        : orderData.orderId,
+
+    mobile:
+      formData.mobile,
+
+    restaurantId:
+  restaurantConfig.id,
+  })
+);
+
+        localStorage.setItem(
+        "currentOrderType",
+        orderData.orderType
+      );
+
+      clearCart();
+
+        navigate("/order-submitted");
+
+  } catch (error) {
+    console.error(error);
+
+    alert(
+      "Failed to place order. Check backend connection."
+    );
+  }
+};
 
   return (
     <div className="min-h-screen bg-[#FFF7F0] flex justify-center">
@@ -377,7 +519,9 @@ export default function Checkout() {
             transition
           "
         >
-          Place Order
+          {editingOrder
+  ? "Update Order"
+  : "Place Order"}
         </button>
       </div>
     </div>
