@@ -283,23 +283,21 @@ def restaurant_login():
 # Create Order
 # ------------------------
 
-@app.route(
-    "/orders",
-    methods=["POST"]
-)
+@app.route("/orders", methods=["POST"])
 def create_order():
 
     data = request.json
 
-    orders_collection.insert_one(
-        data
-    )
+    print("\n========== NEW ORDER ==========")
+    print(data)
+    print("===============================\n")
+
+    orders_collection.insert_one(data)
 
     return jsonify({
         "success": True,
         "message": "Order Received",
-        "orderId":
-        data.get("orderId")
+        "orderId": data.get("orderId")
     })
 
 # ------------------------
@@ -511,7 +509,7 @@ def download_qr(
     )
 
 if __name__ == "__main__":
-
     app.run(
-        debug=True
+        host="0.0.0.0",
+        port=5000
     )

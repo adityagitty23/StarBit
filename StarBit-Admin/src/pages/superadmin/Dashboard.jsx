@@ -42,7 +42,7 @@ export default function Dashboard() {
 
   return (
     <SuperAdminLayout>
-      <div className="space-y-6">
+      <div className="space-y-6 pt-16 md:pt-20 lg:pt-0">
 
         {/* Hero */}
 
@@ -86,18 +86,6 @@ export default function Dashboard() {
             value={activeRestaurants}
             color="text-green-600"
           />
-
-          <StatCard
-            title="Orders Today"
-            value="0"
-            color="text-blue-600"
-          />
-
-          <StatCard
-            title="Revenue"
-            value="₹0"
-            color="text-[#FF7A1A]"
-          />
         </div>
 
         {/* Quick Actions */}
@@ -134,17 +122,6 @@ export default function Dashboard() {
               onClick={() =>
                 navigate(
                   "/restaurants"
-                )
-              }
-            />
-
-            <ActionCard
-              icon="📊"
-              title="Analytics"
-              subtitle="Overview"
-              onClick={() =>
-                navigate(
-                  "/analytics"
                 )
               }
             />

@@ -14,7 +14,6 @@ import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import Orders from "./pages/admin/Orders";
 import Analytics from "./pages/admin/Analytics";
-import SuperAdminAnalytics from "./pages/superadmin/Analytics";
 
 function App() {
   return (
@@ -39,10 +38,6 @@ function App() {
           element={<Dashboard />}
         />
 
-        <Route
-  path="/superadmin-analytics"
-  element={<SuperAdminAnalytics />}
-/>
 
         <Route
           path="/restaurants"
