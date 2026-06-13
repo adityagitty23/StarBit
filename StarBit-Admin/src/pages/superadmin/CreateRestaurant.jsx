@@ -37,10 +37,9 @@ export default function CreateRestaurant() {
     try {
       const restaurant = {
         ...formData,
-
         id: generateRestaurantId(),
-
         status: "active",
+        createdAt: new Date().toISOString(),
       };
 
       await api.post(
@@ -53,7 +52,6 @@ export default function CreateRestaurant() {
       );
 
       navigate("/restaurants");
-
     } catch (error) {
       console.error(error);
 
@@ -63,137 +61,235 @@ export default function CreateRestaurant() {
     }
   };
 
+  
+
   return (
-    <div className="min-h-screen bg-[#FFF7F0] p-6">
+    <div
+      className="
+        min-h-screen
+        bg-gradient-to-br
+        from-[#FFF7F0]
+        via-[#FFF2E8]
+        to-[#FFE6D1]
+        p-4 md:p-6
+      "
+    >
+      <div className="max-w-5xl mx-auto">
 
-      <div className="max-w-2xl mx-auto">
+        {/* Header */}
 
-        <h1 className="text-4xl font-bold">
-          Create Restaurant
-        </h1>
+        <div
+          className="
+            bg-gradient-to-r
+            from-[#FF7A1A]
+            to-[#FF9A4D]
+            rounded-3xl
+            p-6 md:p-8
+            text-white
+            shadow-xl
+            mb-6
+          "
+        >
+          <h1 className="text-3xl md:text-4xl font-bold">
+            🏪 Create Restaurant
+          </h1>
 
-        <p className="text-gray-500 mt-2">
-          Add New Client
-        </p>
-
-        <div className="bg-white rounded-[32px] p-6 mt-6">
-
-          <input
-            type="text"
-            placeholder="Restaurant Name"
-            value={formData.restaurantName}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                restaurantName:
-                  e.target.value,
-              })
-            }
-            className="w-full border rounded-2xl p-4 mb-4"
-          />
-
-          <input
-            type="text"
-            placeholder="Owner Name"
-            value={formData.ownerName}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                ownerName:
-                  e.target.value,
-              })
-            }
-            className="w-full border rounded-2xl p-4 mb-4"
-          />
-
-          <input
-            type="tel"
-            placeholder="Mobile Number"
-            value={formData.mobile}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                mobile:
-                  e.target.value,
-              })
-            }
-            className="w-full border rounded-2xl p-4 mb-4"
-          />
-
-          <input
-            type="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                email:
-                  e.target.value,
-              })
-            }
-            className="w-full border rounded-2xl p-4 mb-4"
-          />
-
-          <input
-            type="text"
-            placeholder="Website URL"
-            value={formData.websiteUrl}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                websiteUrl:
-                  e.target.value,
-              })
-            }
-            className="w-full border rounded-2xl p-4 mb-4"
-          />
-
-          <input
-            type="text"
-            placeholder="Username"
-            value={formData.username}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                username:
-                  e.target.value,
-              })
-            }
-            className="w-full border rounded-2xl p-4 mb-4"
-          />
-
-          <input
-            type="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                password:
-                  e.target.value,
-              })
-            }
-            className="w-full border rounded-2xl p-4 mb-6"
-          />
-
-          <button
-            onClick={handleCreate}
-            className="
-              w-full
-              bg-[#FF7A1A]
-              text-white
-              py-4
-              rounded-2xl
-              font-semibold
-            "
-          >
-            Create Restaurant
-          </button>
-
+          <p className="text-white/80 mt-2">
+            Add a new client to StarBit
+          </p>
         </div>
 
-      </div>
+        {/* Form */}
 
+        <div
+          className="
+            bg-white/60
+            backdrop-blur-xl
+            border
+            border-white/50
+            rounded-3xl
+            p-5 md:p-8
+            shadow-xl
+          "
+        >
+          <div
+            className="
+              grid
+              md:grid-cols-2
+              gap-5
+            "
+          >
+            <InputField
+              label="Restaurant Name"
+              value={formData.restaurantName}
+              onChange={(value) =>
+                setFormData({
+                  ...formData,
+                  restaurantName: value,
+                })
+              }
+            />
+
+            <InputField
+              label="Owner Name"
+              value={formData.ownerName}
+              onChange={(value) =>
+                setFormData({
+                  ...formData,
+                  ownerName: value,
+                })
+              }
+            />
+
+            <InputField
+              label="Mobile Number"
+              value={formData.mobile}
+              onChange={(value) =>
+                setFormData({
+                  ...formData,
+                  mobile: value,
+                })
+              }
+            />
+
+            <InputField
+              label="Email"
+              value={formData.email}
+              onChange={(value) =>
+                setFormData({
+                  ...formData,
+                  email: value,
+                })
+              }
+            />
+
+            <InputField
+              label="Website URL"
+              value={formData.websiteUrl}
+              onChange={(value) =>
+                setFormData({
+                  ...formData,
+                  websiteUrl: value,
+                })
+              }
+            />
+
+            <InputField
+              label="Username"
+              value={formData.username}
+              onChange={(value) =>
+                setFormData({
+                  ...formData,
+                  username: value,
+                })
+              }
+            />
+
+            <div className="md:col-span-2">
+              <InputField
+                label="Password"
+                type="password"
+                value={formData.password}
+                onChange={(value) =>
+                  setFormData({
+                    ...formData,
+                    password: value,
+                  })
+                }
+              />
+            </div>
+          </div>
+
+          <div
+            className="
+              flex
+              flex-col
+              md:flex-row
+              gap-4
+              mt-8
+            "
+          >
+            <button
+              onClick={handleCreate}
+              className="
+                flex-1
+                bg-gradient-to-r
+                from-[#FF7A1A]
+                to-[#FF9A4D]
+                text-white
+                py-4
+                rounded-2xl
+                font-semibold
+                shadow-lg
+                hover:shadow-xl
+                transition-all
+              "
+            >
+              Create Restaurant
+            </button>
+
+            <button
+              onClick={() =>
+                navigate("/restaurants")
+              }
+              className="
+                flex-1
+                bg-white
+                py-4
+                rounded-2xl
+                font-semibold
+                border
+                border-gray-200
+              "
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function InputField({
+  label,
+  value,
+  onChange,
+  type = "text",
+}) {
+  return (
+    <div>
+      <label
+        className="
+          block
+          text-sm
+          font-medium
+          mb-2
+          text-gray-700
+        "
+      >
+        {label}
+      </label>
+
+      <input
+        type={type}
+        value={value}
+        onChange={(e) =>
+          onChange(e.target.value)
+        }
+        className="
+          w-full
+          bg-white/70
+          border
+          border-white/60
+          rounded-2xl
+          px-4
+          py-3
+          outline-none
+          focus:ring-2
+          focus:ring-[#FF7A1A]
+        "
+      />
     </div>
   );
 }

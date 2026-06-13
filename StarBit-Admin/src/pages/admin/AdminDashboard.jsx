@@ -183,26 +183,41 @@ orders.filter(
 ).length;
 
 if (loading) {
-
-return (
-  <div className="min-h-screen flex items-center justify-center">
-    Loading Dashboard...
-  </div>
-);
-
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[#FFF7F0]">
+      <div className="text-center">
+        <div className="text-5xl mb-4">🍽️</div>
+        <p className="text-lg font-semibold text-[#FF7A1A]">
+          Loading Dashboard...
+        </p>
+      </div>
+    </div>
+  );
 }
 
 return (
 
-<div className="min-h-screen bg-[#FFF7F0] p-6">
+<div className="min-h-screen bg-gradient-to-br from-[#FFF7F0] via-[#FFF2E8] to-[#FFE6D1] p-6">
 
+<div
+  className="
+    bg-gradient-to-r
+    from-[#FF7A1A]
+    to-[#FF9A4D]
+    rounded-3xl
+    p-8
+    text-white
+    shadow-xl
+  "
+>
   <h1 className="text-4xl font-bold">
-    {restaurantName}
+    🍽️ {restaurantName}
   </h1>
 
-  <p className="text-gray-500 mt-2">
-    Welcome Back
+  <p className="text-white/80 mt-2">
+    Welcome back to your dashboard
   </p>
+</div>
 
   {/* Analytics Cards */}
 
@@ -322,72 +337,137 @@ return (
 
   {/* Actions */}
 
-  <div className="flex gap-4 mt-8">
+<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
 
-    <button
-      onClick={() =>
-        navigate(
-          "/orders"
-        )
-      }
-      className="
-        bg-[#FF7A1A]
-        text-white
-        px-6
-        py-3
-        rounded-2xl
-      "
-    >
-      View Orders
-    </button>
-
-    <button
-    onClick={() =>
-      navigate("/analytics")
-    }
+  <button
+    onClick={() => navigate("/orders")}
     className="
-      bg-[#0084ff]
-      text-white
+      bg-white/70
       backdrop-blur-xl
-
       border
-      border-white/50
-
-      px-6
-      py-3
-
-      rounded-2xl
+      border-white/60
+      rounded-3xl
+      p-6
+      shadow-lg
+      hover:shadow-xl
+      hover:-translate-y-1
+      transition-all
     "
   >
-    View Analytics
+    <div className="text-4xl">📦</div>
+    <p className="font-semibold mt-2">
+      Orders
+    </p>
   </button>
 
-    <button
-      onClick={() => {
+  <button
+    onClick={() => navigate("/analytics")}
+    className="
+      bg-white/70
+      backdrop-blur-xl
+      border
+      border-white/60
+      rounded-3xl
+      p-6
+      shadow-lg
+      hover:shadow-xl
+      hover:-translate-y-1
+      transition-all
+    "
+  >
+    <div className="text-4xl">📊</div>
+    <p className="font-semibold mt-2">
+      Analytics
+    </p>
+  </button>
 
-        localStorage.removeItem(
-          "restaurantId"
-        );
-
-        localStorage.removeItem(
-          "restaurantName"
-        );
-
-        navigate("/");
-
-      }}
-      className="
-        bg-red-500
-        text-white
-        px-6
-        py-3
-        rounded-2xl
-      "
-    >
+  <button
+    onClick={() => {
+      localStorage.removeItem("restaurantId");
+      localStorage.removeItem("restaurantName");
+      navigate("/");
+    }}
+    className="
+      bg-red-500
+      text-white
+      rounded-3xl
+      p-6
+      shadow-lg
+      hover:shadow-xl
+      hover:-translate-y-1
+      transition-all
+    "
+  >
+    <div className="text-4xl">🚪</div>
+    <p className="font-semibold mt-2">
       Logout
-    </button>
+    </p>
+  </button>
 
-  </div>
+</div>
+
+{/* Recent Orders */}
+
+<div
+  className="
+    mt-8
+    bg-white/70
+    backdrop-blur-xl
+    border
+    border-white/60
+    rounded-3xl
+    p-6
+    shadow-lg
+  "
+>
+  <h2 className="text-xl font-bold mb-4">
+    Recent Orders
+  </h2>
+
+  {orders.length === 0 ? (
+    <p className="text-gray-500">
+      No orders yet
+    </p>
+  ) : (
+    orders.slice(0, 5).map((order) => (
+      <div
+        key={order.orderId}
+        className="
+          flex
+          justify-between
+          items-center
+          py-4
+          border-b
+          border-gray-100
+        "
+      >
+        <div>
+          <p className="font-semibold">
+            {order.customerName}
+          </p>
+
+          <p className="text-sm text-gray-500">
+            {order.orderId}
+          </p>
+        </div>
+
+        <span
+          className="
+            px-3
+            py-1
+            rounded-full
+            bg-orange-100
+            text-[#FF7A1A]
+            text-xs
+            font-semibold
+          "
+        >
+          {order.status}
+        </span>
+      </div>
+    ))
+  )}
+</div>
 
 </div>
 
@@ -396,51 +476,50 @@ return (
 }
 
 function DashboardCard({
-title,
-value,
-orange,
+  title,
+  value,
+  orange,
 }) {
+  return (
+    <div
+      className="
+        bg-white/70
+        backdrop-blur-xl
+        border
+        border-white/60
+        rounded-3xl
+        p-5
+        shadow-lg
+        hover:shadow-xl
+        hover:-translate-y-1
+        transition-all
+        duration-300
+      "
+    >
+      <p
+        className="
+          text-gray-500
+          text-sm
+          font-medium
+        "
+      >
+        {title}
+      </p>
 
-return (
-
-<div
-  className="
-    bg-white/70
-    backdrop-blur-xl
-
-    border
-    border-white/50
-
-    rounded-[28px]
-
-    p-5
-
-    shadow-sm
-  "
->
-
-  <p className="text-gray-500">
-    {title}
-  </p>
-
-  <h2
-    className={`
-      text-3xl
-      font-bold
-      mt-2
-
-      ${
-        orange
-          ? "text-[#FF7A1A]"
-          : "text-black"
-      }
-    `}
-  >
-    {value}
-  </h2>
-
-</div>
-
-);
-
+      <h2
+        className={`
+          text-3xl
+          font-bold
+          mt-2
+          ${
+            orange
+              ? "text-[#FF7A1A]"
+              : "text-gray-900"
+          }
+        `}
+      >
+        {value}
+      </h2>
+    </div>
+  );
 }

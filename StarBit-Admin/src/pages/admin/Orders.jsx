@@ -136,16 +136,98 @@ const updateStatus = async (
   }
 
   return (
-    <div className="min-h-screen bg-[#FFF7F0] p-6">
+    <div className="min-h-screen bg-gradient-to-br
+from-[#FFF7F0]
+via-[#FFF2E8]
+to-[#FFE6D1] p-6">
 
-      <h1 className="text-3xl font-bold mb-6">
-        Orders
-      </h1>
+ <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+
+  <div className="bg-white/70 backdrop-blur-xl rounded-3xl p-4 shadow-lg">
+    <p className="text-gray-500 text-sm">Pending</p>
+    <h2 className="text-3xl font-bold">
+      {orders.filter(o => o.status === "pending").length}
+    </h2>
+  </div>
+
+  <div className="bg-white/70 backdrop-blur-xl rounded-3xl p-4 shadow-lg">
+    <p className="text-gray-500 text-sm">Preparing</p>
+    <h2 className="text-3xl font-bold text-orange-500">
+      {orders.filter(o => o.status === "preparing").length}
+    </h2>
+  </div>
+
+  <div className="bg-white/70 backdrop-blur-xl rounded-3xl p-4 shadow-lg">
+    <p className="text-gray-500 text-sm">Ready</p>
+    <h2 className="text-3xl font-bold text-blue-500">
+      {orders.filter(o => o.status === "ready_for_pickup").length}
+    </h2>
+  </div>
+
+  <div className="bg-white/70 backdrop-blur-xl rounded-3xl p-4 shadow-lg">
+    <p className="text-gray-500 text-sm">Completed</p>
+    <h2 className="text-3xl font-bold text-green-500">
+      {orders.filter(o => o.status === "completed").length}
+    </h2>
+  </div>
+
+</div>
+
+<div className="flex justify-between items-center mb-6">
+  <p className="text-gray-600">
+    Total Orders: {orders.length}
+  </p>
+
+  <div
+    className="
+      bg-white/70
+      backdrop-blur-xl
+      px-4
+      py-2
+      rounded-2xl
+      shadow-md
+    "
+  >
+    🔄 Auto Refresh: 5s
+  </div>
+</div>
+<div
+  className="
+    bg-gradient-to-r
+    from-[#FF7A1A]
+    to-[#FF9A4D]
+    rounded-3xl
+    p-8
+    text-white
+    shadow-xl
+    mb-6
+  "
+>
+  <h1 className="text-4xl font-bold">
+    📦 Orders
+  </h1>
+
+  <p className="text-white/80 mt-2">
+    Manage incoming restaurant orders
+  </p>
+</div>
 
       {orders.length === 0 ? (
 
         <div className="bg-white p-6 rounded-3xl shadow-sm">
-          No Orders Yet
+          <div className="text-center py-12">
+  <div className="text-6xl mb-4">
+    🍽️
+  </div>
+
+  <h2 className="text-2xl font-bold">
+    No Orders Yet
+  </h2>
+
+  <p className="text-gray-500 mt-2">
+    New customer orders will appear here
+  </p>
+</div>
         </div>
 
       ) : (
@@ -159,12 +241,18 @@ const updateStatus = async (
                 key={
                   order.orderId
                 }
-                className="
-                  bg-white
-                  p-5
-                  rounded-3xl
-                  shadow-sm
-                "
+className="
+  bg-white/70
+  backdrop-blur-xl
+  border
+  border-white/60
+  p-6
+  rounded-3xl
+  shadow-lg
+  hover:shadow-xl
+  hover:-translate-y-1
+  transition-all
+"
               >
 
                 <div className="flex justify-between">
@@ -175,7 +263,7 @@ const updateStatus = async (
                       Order #{index + 1}
                     </p>
 
-                    <h2 className="text-xl font-bold">
+                    <h2 className="text-2xl font-bold text-gray-900">
                       {
                         order.customerName
                       }
@@ -186,6 +274,10 @@ const updateStatus = async (
                         order.mobile
                       }
                     </p>
+
+                    <p className="text-sm text-gray-400">
+  {new Date(order.createdAt).toLocaleString()}
+</p>
 
                     <p className="text-xs text-gray-400 mt-1">
                       {
@@ -229,7 +321,14 @@ const updateStatus = async (
 
                 </div>
 
-                <div className="mt-4">
+                <div
+  className="
+    mt-4
+    bg-[#FFF8F2]
+    rounded-2xl
+    p-4
+  "
+>
 
                   <h3 className="font-semibold mb-2">
                     Items
@@ -277,7 +376,8 @@ const updateStatus = async (
   <div
     className="
       mt-4
-      bg-yellow-50
+      bg-white/60
+backdrop-blur-xl
       border
       border-yellow-200
       rounded-2xl
@@ -298,7 +398,7 @@ const updateStatus = async (
 
                 <div className="border-t mt-4 pt-4 flex justify-between items-center">
 
-                  <span className="text-xl font-bold text-[#FF7A1A]">
+                  <span className="text-2xl font-bold text-[#FF7A1A]">
                     ₹
                     {
                       order.total
@@ -318,13 +418,16 @@ const updateStatus = async (
           "payment_required"
         )
       }
-      className="
-        bg-green-500
-        text-white
-        px-4
-        py-2
-        rounded-xl
-      "
+className="
+bg-green-500
+text-white
+px-4
+py-2
+rounded-xl
+shadow-md
+hover:scale-105
+transition-all
+"
     >
       Accept
     </button>
@@ -335,13 +438,16 @@ const updateStatus = async (
       order.orderId
     )
   }
-  className="
-    bg-yellow-500
-    text-white
-    px-4
-    py-2
-    rounded-xl
-  "
+className="
+bg-yellow-500
+text-white
+px-4
+py-2
+rounded-xl
+shadow-md
+hover:scale-105
+transition-all
+"
 >
   Review
 </button>
@@ -355,13 +461,16 @@ const updateStatus = async (
           "rejected"
         )
       }
-      className="
-        bg-red-500
-        text-white
-        px-4
-        py-2
-        rounded-xl
-      "
+className="
+bg-red-500
+text-white
+px-4
+py-2
+rounded-xl
+shadow-md
+hover:scale-105
+transition-all
+"
     >
       Reject
     </button>

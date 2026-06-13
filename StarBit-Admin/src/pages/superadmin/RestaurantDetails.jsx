@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-
+import { useParams, useNavigate } from "react-router-dom";
 import api from "../../services/api";
 
 export default function RestaurantDetails() {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [restaurant, setRestaurant] =
     useState(null);
@@ -13,12 +13,9 @@ export default function RestaurantDetails() {
     useState("");
 
   useEffect(() => {
-
     const fetchRestaurant =
       async () => {
-
         try {
-
           const res =
             await api.get(
               `/restaurants/${id}`
@@ -27,24 +24,17 @@ export default function RestaurantDetails() {
           setRestaurant(
             res.data
           );
-
         } catch (error) {
-
           console.error(error);
-
         }
-
       };
 
     fetchRestaurant();
-
   }, [id]);
 
   const updateRestaurant =
     async (updatedRestaurant) => {
-
       try {
-
         await api.put(
           `/restaurants/${id}`,
           updatedRestaurant
@@ -53,26 +43,18 @@ export default function RestaurantDetails() {
         setRestaurant(
           updatedRestaurant
         );
-
       } catch (error) {
-
         console.error(error);
-
       }
-
     };
 
   const handlePasswordChange =
     async () => {
-
       if (!newPassword.trim()) {
-
         alert(
           "Enter New Password"
         );
-
         return;
-
       }
 
       const updatedRestaurant = {
@@ -90,12 +72,10 @@ export default function RestaurantDetails() {
       );
 
       setNewPassword("");
-
     };
 
   const handleDisable =
     async () => {
-
       const updatedRestaurant = {
         ...restaurant,
         status: "inactive",
@@ -108,12 +88,10 @@ export default function RestaurantDetails() {
       alert(
         "Restaurant Disabled"
       );
-
     };
 
   const handleEnable =
     async () => {
-
       const updatedRestaurant = {
         ...restaurant,
         status: "active",
@@ -126,200 +104,306 @@ export default function RestaurantDetails() {
       alert(
         "Restaurant Enabled"
       );
-
     };
 
   if (!restaurant) {
     return (
-      <div className="min-h-screen bg-[#FFF7F0] flex items-center justify-center">
-
+      <div
+        className="
+          min-h-screen
+          flex
+          items-center
+          justify-center
+          bg-[#FFF7F0]
+        "
+      >
         <h1 className="text-3xl font-bold">
           Loading...
         </h1>
-
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#FFF7F0] p-6">
+    <div
+      className="
+        min-h-screen
+        bg-gradient-to-br
+        from-[#FFF7F0]
+        via-[#FFF2E8]
+        to-[#FFE6D1]
+        p-4 md:p-6
+      "
+    >
+      <div className="max-w-5xl mx-auto space-y-6">
 
-      <div className="max-w-4xl mx-auto">
+        {/* Hero */}
 
-        <div className="bg-white rounded-[32px] p-8 shadow-sm">
-
-          <div className="flex justify-between items-start">
-
+        <div
+          className="
+            bg-gradient-to-r
+            from-[#FF7A1A]
+            to-[#FF9A4D]
+            rounded-3xl
+            p-6 md:p-8
+            text-white
+            shadow-xl
+          "
+        >
+          <div
+            className="
+              flex
+              flex-col
+              md:flex-row
+              justify-between
+              gap-4
+            "
+          >
             <div>
-
-              <h1 className="text-4xl font-bold">
-                {
-                  restaurant.restaurantName
-                }
+              <h1 className="text-3xl md:text-4xl font-bold">
+                🍽️ {restaurant.restaurantName}
               </h1>
 
-              <p className="text-gray-500 mt-2">
+              <p className="text-white/80 mt-2">
                 Restaurant Details
               </p>
-
             </div>
 
             <span
               className={`
                 px-4
                 py-2
-                rounded-full
-                font-medium
+                rounded-2xl
+                font-semibold
+                h-fit
+
                 ${
                   restaurant.status ===
                   "active"
-                    ? "bg-green-100 text-green-700"
-                    : "bg-red-100 text-red-700"
+                    ? "bg-green-500"
+                    : "bg-red-500"
                 }
               `}
             >
               {restaurant.status}
             </span>
-
           </div>
+        </div>
 
-          <div className="mt-8 space-y-4">
+        {/* Restaurant Info */}
 
-            <p>
-              <strong>ID:</strong>{" "}
-              {restaurant.id}
-            </p>
+        <div
+          className="
+            bg-white/60
+            backdrop-blur-xl
+            border
+            border-white/50
+            rounded-3xl
+            p-6
+            shadow-lg
+          "
+        >
+          <h2 className="text-2xl font-bold mb-5">
+            Restaurant Information
+          </h2>
 
-            <p>
-              <strong>Owner:</strong>{" "}
-              {restaurant.ownerName}
-            </p>
+          <div className="grid md:grid-cols-2 gap-4">
 
-            <p>
-              <strong>Mobile:</strong>{" "}
-              {restaurant.mobile}
-            </p>
-
-            <p>
-              <strong>Email:</strong>{" "}
-              {restaurant.email}
-            </p>
-
-            <p>
-              <strong>Website:</strong>{" "}
-              {restaurant.websiteUrl}
-            </p>
-
-            <p>
-              <strong>Username:</strong>{" "}
-              {restaurant.username}
-            </p>
-
-            <p>
-              <strong>Password:</strong>{" "}
-              {restaurant.password}
-            </p>
-
-          </div>
-
-          {/* Password Change */}
-
-          <div className="mt-10 border-t pt-8">
-
-            <h2 className="text-2xl font-bold mb-4">
-              Change Password
-            </h2>
-
-            <input
-              type="text"
-              placeholder="New Password"
-              value={newPassword}
-              onChange={(e) =>
-                setNewPassword(
-                  e.target.value
-                )
-              }
-              className="
-                w-full
-                border
-                border-gray-200
-                rounded-2xl
-                p-4
-                mb-4
-              "
+            <InfoItem
+              label="Restaurant ID"
+              value={restaurant.id}
             />
 
+            <InfoItem
+              label="Owner"
+              value={restaurant.ownerName}
+            />
+
+            <InfoItem
+              label="Mobile"
+              value={restaurant.mobile}
+            />
+
+            <InfoItem
+              label="Email"
+              value={restaurant.email}
+            />
+
+            <InfoItem
+              label="Website"
+              value={restaurant.websiteUrl}
+            />
+
+            <InfoItem
+              label="Username"
+              value={restaurant.username}
+            />
+
+            <InfoItem
+              label="Password"
+              value="********"
+            />
+
+          </div>
+        </div>
+
+        {/* Change Password */}
+
+        <div
+          className="
+            bg-white/60
+            backdrop-blur-xl
+            border
+            border-white/50
+            rounded-3xl
+            p-6
+            shadow-lg
+          "
+        >
+          <h2 className="text-2xl font-bold mb-4">
+            Change Password
+          </h2>
+
+          <input
+            type="password"
+            placeholder="New Password"
+            value={newPassword}
+            onChange={(e) =>
+              setNewPassword(
+                e.target.value
+              )
+            }
+            className="
+              w-full
+              bg-white/70
+              border
+              border-white/60
+              rounded-2xl
+              p-4
+              mb-4
+              outline-none
+            "
+          />
+
+          <button
+            onClick={
+              handlePasswordChange
+            }
+            className="
+              bg-gradient-to-r
+              from-[#FF7A1A]
+              to-[#FF9A4D]
+              text-white
+              px-6
+              py-3
+              rounded-2xl
+              font-semibold
+              shadow-lg
+            "
+          >
+            Update Password
+          </button>
+        </div>
+
+        {/* Controls */}
+
+        <div
+          className="
+            bg-white/60
+            backdrop-blur-xl
+            border
+            border-white/50
+            rounded-3xl
+            p-6
+            shadow-lg
+          "
+        >
+          <h2 className="text-2xl font-bold mb-4">
+            Account Controls
+          </h2>
+
+          {restaurant.status ===
+          "active" ? (
             <button
               onClick={
-                handlePasswordChange
+                handleDisable
               }
               className="
-                bg-[#FF7A1A]
+                bg-red-500
+                hover:bg-red-600
                 text-white
                 px-6
                 py-3
                 rounded-2xl
                 font-semibold
+                transition-all
               "
             >
-              Change Password
+              Disable Restaurant
             </button>
+          ) : (
+            <button
+              onClick={
+                handleEnable
+              }
+              className="
+                bg-green-500
+                hover:bg-green-600
+                text-white
+                px-6
+                py-3
+                rounded-2xl
+                font-semibold
+                transition-all
+              "
+            >
+              Enable Restaurant
+            </button>
+          )}
 
-          </div>
-
-          {/* Status */}
-
-          <div className="mt-10 border-t pt-8">
-
-            <h2 className="text-2xl font-bold mb-4">
-              Account Controls
-            </h2>
-
-            {restaurant.status ===
-            "active" ? (
-
-              <button
-                onClick={
-                  handleDisable
-                }
-                className="
-                  bg-red-500
-                  text-white
-                  px-6
-                  py-3
-                  rounded-2xl
-                  font-semibold
-                "
-              >
-                Disable Restaurant
-              </button>
-
-            ) : (
-
-              <button
-                onClick={
-                  handleEnable
-                }
-                className="
-                  bg-green-500
-                  text-white
-                  px-6
-                  py-3
-                  rounded-2xl
-                  font-semibold
-                "
-              >
-                Enable Restaurant
-              </button>
-
-            )}
-
-          </div>
-
+          <button
+            onClick={() =>
+              navigate("/restaurants")
+            }
+            className="
+              ml-3
+              bg-gray-200
+              hover:bg-gray-300
+              px-6
+              py-3
+              rounded-2xl
+              font-semibold
+              transition-all
+            "
+          >
+            Back
+          </button>
         </div>
 
       </div>
+    </div>
+  );
+}
 
+function InfoItem({
+  label,
+  value,
+}) {
+  return (
+    <div
+      className="
+        bg-white/50
+        rounded-2xl
+        p-4
+      "
+    >
+      <p className="text-sm text-gray-500">
+        {label}
+      </p>
+
+      <p className="font-semibold mt-1">
+        {value || "-"}
+      </p>
     </div>
   );
 }

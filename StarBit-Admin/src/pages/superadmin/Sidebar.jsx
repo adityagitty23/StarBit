@@ -1,17 +1,17 @@
 import {
   LayoutDashboard,
   Store,
-  QrCode,
   BarChart3,
   Settings,
   LogOut,
 } from "lucide-react";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import logo from "../../assets/logo/starbit-logo.png";
 
 export default function Sidebar() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const menuItems = [
     {
@@ -25,15 +25,10 @@ export default function Sidebar() {
       path: "/restaurants",
     },
     {
-      label: "QR Codes",
-      icon: QrCode,
-      path: "#",
+      label: "Analytics",
+      icon: BarChart3,
+      path: "/analytics",
     },
-    {
-  label: "Analytics",
-  icon: BarChart3,
-  path: "/analytics",
-},
     {
       label: "Settings",
       icon: Settings,
@@ -42,27 +37,37 @@ export default function Sidebar() {
   ];
 
   return (
-    <div
+    <aside
       className="
-        w-[280px]
+        hidden lg:flex
+        flex-col
+
+        w-64
         min-h-screen
 
-        bg-white/40
+        bg-white/60
         backdrop-blur-xl
 
         border-r
-        border-white/30
+        border-white/50
 
-        shadow-xl
+        shadow-lg
       "
     >
-      <div className="p-6 border-b border-white/30">
+      {/* Logo */}
 
+      <div
+        className="
+          p-6
+          border-b
+          border-white/40
+        "
+      >
         <img
           src={logo}
           alt="StarBit"
           className="
-            h-16
+            h-14
             mx-auto
             object-contain
           "
@@ -71,20 +76,23 @@ export default function Sidebar() {
         <p
           className="
             text-center
-            text-sm
             text-gray-500
-            mt-2
+            text-sm
+            mt-3
           "
         >
-          Owner Panel
+          Super Admin Panel
         </p>
-
       </div>
 
-      <div className="p-4 space-y-2">
+      {/* Menu */}
 
+      <div className="flex-1 p-4 space-y-2">
         {menuItems.map((item) => {
           const Icon = item.icon;
+
+          const active =
+            location.pathname === item.path;
 
           return (
             <button
@@ -92,7 +100,7 @@ export default function Sidebar() {
               onClick={() =>
                 navigate(item.path)
               }
-              className="
+              className={`
                 w-full
 
                 flex
@@ -104,53 +112,58 @@ export default function Sidebar() {
 
                 rounded-2xl
 
-                hover:bg-white/60
-
                 transition-all
                 duration-300
-              "
+
+                ${
+                  active
+                    ? "bg-[#FF7A1A] text-white shadow-md"
+                    : "hover:bg-white text-gray-700"
+                }
+              `}
             >
               <Icon size={20} />
 
-              {item.label}
+              <span className="font-medium">
+                {item.label}
+              </span>
             </button>
           );
         })}
-
       </div>
 
-      <div className="absolute bottom-5 left-4 right-4">
+      {/* Logout */}
 
-<button
-  onClick={() => {
+      <div className="p-4">
+        <button
+          onClick={() => {
+            navigate("/superadmin-login");
+          }}
+          className="
+            w-full
 
-    navigate(
-      "/superadmin-login"
-    );
+            flex
+            items-center
+            gap-3
 
-  }}
-  className="
-    w-full
+            px-4
+            py-3
 
-    flex
-    items-center
-    gap-3
+            rounded-2xl
 
-    px-4
-    py-3
+            bg-red-50
+            text-red-600
 
-    rounded-2xl
+            hover:bg-red-100
 
-    bg-red-50
-    text-red-600
-  "
->
-  <LogOut size={20} />
+            transition-all
+          "
+        >
+          <LogOut size={20} />
 
-  Logout
-</button>
-
+          Logout
+        </button>
       </div>
-    </div>
+    </aside>
   );
 }
