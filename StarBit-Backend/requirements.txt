@@ -4,4 +4,4 @@ pymongo
 python-dotenv
 qrcode
 Pillow
-gunicorn
+gunicorn app:app
